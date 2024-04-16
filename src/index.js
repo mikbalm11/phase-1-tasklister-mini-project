@@ -13,13 +13,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 function buildToDo(newToDo){
-  //first, the buildToDo function creates an li element and a button element. 
   const taskLi = document.createElement('li');
   const deleteButton = document.createElement('button');
+  const editButton = document.createElement('button');
   const selectionList = document.createElement('select');
-  //selectionList.textContent = "Priority";
 
-  const optionArray = ["High", "Medium", "Low"]
+  const optionArray = ['High', 'Medium', 'Low'];
 
   for (e of optionArray) {
     var option = document.createElement('option');
@@ -28,20 +27,57 @@ function buildToDo(newToDo){
     selectionList.appendChild(option);
   }
 
-
-
   deleteButton.textContent = '❌';
+  editButton.textContent = '✎';
   taskLi.textContent = `${newToDo} `;
 
   taskLi.appendChild(deleteButton);
+  taskLi.appendChild(editButton);
   taskLi.appendChild(selectionList);
-
-  //selectionList.addEventListener('form', deleteTask);
 
   document.querySelector('#tasks').appendChild(taskLi);
 
+  selectionList.addEventListener('change', function() {
+    const selectedPriority = selectionList.value;
+    updateTextColor(taskLi, selectedPriority);
+  });
 
+  editButton.addEventListener('click', editTask.bind(null, taskLi));
   deleteButton.addEventListener('click', deleteTask);
+}
+
+function updateTextColor(taskLi, priority) {
+  switch (priority) {
+    case 'High':
+      taskLi.style.color = 'red';
+      break;
+    case 'Medium':
+      taskLi.style.color = 'yellow';
+      break;
+    case 'Low':
+      taskLi.style.color = 'green';
+      break;
+    default:
+      taskLi.style.color = 'black';
+  }
+}
+
+function editTask(taskLi, e) {
+  const taskText = taskLi.textContent.trim();
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.value = taskText;
+  taskLi.textContent = ''; // Clear task content
+  taskLi.appendChild(input);
+  input.focus();
+
+  // When editing is done (by pressing Enter), update task text
+  input.addEventListener('keyup', function(event) {
+    if (event.key === 'Enter') {
+      const newTaskText = input.value.trim();
+      taskLi.textContent = newTaskText;
+    }
+  });
 }
 
 function deleteTask(e) {
