@@ -11,9 +11,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+// add button to each task to edit items
+// add listen for button click 
+// create new form element on DOM
+// create a second button to save the form
+// capture user input after second button click
+// update innertext of li with the new input
 
 function buildToDo(newToDo){
-  const taskLi = document.createElement('li');
+  const taskItem = document.createElement('li');
   const deleteButton = document.createElement('button');
   const editButton = document.createElement('button');
   const selectionList = document.createElement('select');
@@ -29,56 +35,76 @@ function buildToDo(newToDo){
 
   deleteButton.textContent = '❌';
   editButton.textContent = '✎';
-  taskLi.textContent = `${newToDo} `;
+  taskItem.textContent = `${newToDo} `;
 
-  taskLi.appendChild(deleteButton);
-  taskLi.appendChild(editButton);
-  taskLi.appendChild(selectionList);
+  taskItem.appendChild(deleteButton);
+  taskItem.appendChild(editButton);
+  taskItem.appendChild(selectionList);
 
-  document.querySelector('#tasks').appendChild(taskLi);
+  document.querySelector('#tasks').appendChild(taskItem);
 
   selectionList.addEventListener('change', function() {
     const selectedPriority = selectionList.value;
-    updateTextColor(taskLi, selectedPriority);
+    updateTextColor(taskItem, selectedPriority);
   });
 
-  editButton.addEventListener('click', editTask.bind(null, taskLi));
+  editButton.addEventListener('click', editForm)
+  // pass li
+
+  // editButton.addEventListener('click', editTask.bind(null, taskItem));
   deleteButton.addEventListener('click', deleteTask);
 }
 
-function updateTextColor(taskLi, priority) {
+/* <form id="create-task-form" action="" method="POST">
+<label for="new-task-description">Task description:</label>
+<input type="text" id="new-task-description" name="new-task-description" placeholder="description">
+<input type="submit" value="Create New Task">
+</form> */
+
+function editForm (e) {
+  // create the form elemnt on DOM
+  const editForm = document.createElement('form');
+  const editLabel = document.createElement('label');
+  editLabel.innerText = "Edit task"
+  const editInput = document.createElement('input');
+  //e.
+  // structure and append the form
+  // will this be the correct spot?
+
+}
+
+function updateTextColor(taskItem, priority) {
   switch (priority) {
     case 'High':
-      taskLi.style.color = 'red';
+      taskItem.style.color = 'red';
       break;
     case 'Medium':
-      taskLi.style.color = 'yellow';
+      taskItem.style.color = 'yellow';
       break;
     case 'Low':
-      taskLi.style.color = 'green';
+      taskItem.style.color = 'green';
       break;
     default:
-      taskLi.style.color = 'black';
+      taskItem.style.color = 'black';
   }
 }
 
-function editTask(taskLi, e) {
-  const taskText = taskLi.textContent.trim();
-  const input = document.createElement('input');
-  input.type = 'text';
-  input.value = taskText;
-  taskLi.textContent = ''; // Clear task content
-  taskLi.appendChild(input);
-  input.focus();
+// function editTask(taskItem, e) {
+//   const taskText = taskItem.textContent.trim();
+//   const input = document.createElement('input');
+//   input.type = 'text';
+//   input.value = taskText;
+//   taskItem.textContent = '';
+//   taskItem.appendChild(input);
+//   input.focus();
 
-  // When editing is done (by pressing Enter), update task text
-  input.addEventListener('keyup', function(event) {
-    if (event.key === 'Enter') {
-      const newTaskText = input.value.trim();
-      taskLi.textContent = newTaskText;
-    }
-  });
-}
+//   input.addEventListener('keyup', function(event) {
+//     if (event.key === 'Enter') {
+//       const newTaskText = input.value.trim();
+//       taskItem.textContent = newTaskText;
+//     }
+//   });
+// }
 
 function deleteTask(e) {
   e.target.parentNode.remove();
